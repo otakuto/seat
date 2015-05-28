@@ -5,8 +5,8 @@ import os
 from optparse import OptionParser
 
 parser = OptionParser()
-parser.add_option("-x", type="int", dest="x")
-parser.add_option("-y", type="int", dest="y")
+parser.add_option("--width", type="int", dest="width")
+parser.add_option("--height", type="int", dest="height")
 parser.add_option("-r", "--row", type="int", dest="row")
 parser.add_option("-c", "--column", type="int", dest="column")
 parser.add_option("-n", "--name", type="str", dest="name")
@@ -70,7 +70,7 @@ table.seat
 
 table.seat td
 {
-	width: """ + str(int(100 / float(options.x))) + """%;
+	width: """ + str(int(100 / float(options.width))) + """%;
 	text-align: center;
 	font-size: 300%;
 }
@@ -90,33 +90,33 @@ table.seat td
 	random.shuffle(it)
 	it = iter(it)
 	i = 0
-	seat = [[0 for x in range(options.column * options.x)] for y in range(options.row * options.y)]
-	for y in range(options.row * options.y):
-		r = range(options.column * options.x)
-		if (options.student - i) < (options.column * options.x):
-			r = range(int(((options.column * options.x) - (options.student - i)) / 2), int(((options.column * options.x) - (options.student - i)) / 2) + (options.student - i))
+	seat = [[0 for x in range(options.column * options.width)] for y in range(options.row * options.height)]
+	for y in range(options.row * options.height):
+		r = range(options.column * options.width)
+		if (options.student - i) < (options.column * options.width):
+			r = range(int(((options.column * options.width) - (options.student - i)) / 2), int(((options.column * options.width) - (options.student - i)) / 2) + (options.student - i))
 		for x in r:
 			seat[y][x] = next(it)
 			i += 1
 
-	for y in range(options.row * options.y):
-		for x in range(options.column * options.x):
+	for y in range(options.row * options.height):
+		for x in range(options.column * options.width):
 			if seat[y][x] == 0:
 				seat[y][x] = "&nbsp;"
 
 	if not(options.top):
-		for y in range(int(options.row * options.y / 2)):
-			for x in range(options.column * options.x):
-				seat[y][x], seat[(options.row * options.y) - y - 1][(options.column * options.x) - x - 1] = seat[(options.row * options.y) - y - 1][(options.column * options.x) - x - 1], seat[y][x]
+		for y in range(int(options.row * options.height / 2)):
+			for x in range(options.column * options.width):
+				seat[y][x], seat[(options.row * options.height) - y - 1][(options.column * options.width) - x - 1] = seat[(options.row * options.height) - y - 1][(options.column * options.width) - x - 1], seat[y][x]
 
 	for row in range(options.row):
 		f.write("<tr>\n")
 		for column in range(options.column):
 			f.write("""<td>\n<table class="seat">\n""")
-			for y in range(options.y):
+			for y in range(options.height):
 				f.write("<tr>\n")
-				for x in range(options.x):
-					f.write("<td>" + str(seat[(row * options.y) + y][(column * options.x) + x]) + "</td>")
+				for x in range(options.width):
+					f.write("<td>" + str(seat[(row * options.height) + y][(column * options.width) + x]) + "</td>")
 				f.write("\n</tr>\n")
 			f.write("</table>\n</td>\n")
 		f.write("</tr>\n")
